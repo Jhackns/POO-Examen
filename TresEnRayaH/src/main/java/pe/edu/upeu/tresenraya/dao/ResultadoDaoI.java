@@ -23,4 +23,6 @@ public interface ResultadoDaoI {
     public ResultadoTO buscarResultado(int id);
 
     public void reportarResultado();
+
+    public void eliminarResultado(int parseInt);
 }

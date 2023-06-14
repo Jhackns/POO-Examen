@@ -17,9 +17,8 @@ import pe.edu.upeu.tresenraya.conx.ConnS;
 import pe.edu.upeu.tresenraya.modelo.ResultadoTO;
 import pe.edu.upeu.tresenraya.util.ErrorLogger;
 
+public class ResultadoDAO implements ResultadoDaoI {
 
-public class ResultadoDAO implements ResultadoDaoI{
-    
     Statement stmt = null;
     Vector columnNames;
     Vector visitdata;
@@ -49,7 +48,7 @@ public class ResultadoDAO implements ResultadoDaoI{
             ps.setInt(++i, d.getPunto());
             ps.setString(++i, d.getEstado());
             rsId = ps.executeUpdate();// 0 no o 1 si commit
-            try ( ResultSet rs = ps.getGeneratedKeys()) {
+            try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
                     rsId = rs.getInt(1);
                 }
@@ -67,7 +66,7 @@ public class ResultadoDAO implements ResultadoDaoI{
         System.out.println("actualizar d.getNombre_partida: " + d.getNombrePartida());
         System.out.println(d.idResultado);
         int comit = 0;
-        String sql = "UPDATE resultados SET "  
+        String sql = "UPDATE resultados SET "
                 + "ganador=?, "
                 + "punto=?, "
                 + "estado=? "
@@ -84,11 +83,12 @@ public class ResultadoDAO implements ResultadoDaoI{
         } catch (SQLException ex) {
             log.log(Level.SEVERE, "update", ex);
         }
-        return comit;}
+        return comit;
+    }
 
     @Override
     public int delete(String id) throws Exception {
-         int comit = 0;
+        int comit = 0;
         String sql = "DELETE FROM resultados WHERE nombre_partido = ?";
         try {
             ps = connection.prepareStatement(sql);
@@ -99,14 +99,16 @@ public class ResultadoDAO implements ResultadoDaoI{
             // System.err.println("NO del " + ex.toString());
             throw new Exception("Detalle:" + ex.getMessage());
         }
-        return comit;}
+        return comit;
+    }
 
     @Override
     public List<ResultadoTO> listCmb(String filter) {
         List<ResultadoTO> ls = new ArrayList();
         ls.add(new ResultadoTO());
         ls.addAll(listarResultado());
-        return ls;}
+        return ls;
+    }
 
     @Override
     public List<ResultadoTO> listarResultado() {
@@ -123,44 +125,57 @@ public class ResultadoDAO implements ResultadoDaoI{
                 cli.setGanador(rs.getString("ganador"));
                 cli.setPunto(rs.getInt("punto"));
                 cli.setEstado(rs.getString("estado"));
-                
+
                 cli.setIdResultado(rs.getInt("id_resultado"));
                 listarresultado.add(cli);
             }
         } catch (SQLException e) {
             System.out.println(e.toString());
         }
-        return listarresultado;}
+        return listarresultado;
+    }
 
     @Override
     public ResultadoTO buscarResultado(int id) {
         ResultadoTO resultado = new ResultadoTO();
         String sql = "SELECT * FROM resultados WHERE id_resultado = ?";
-        System.out.println("ID: "+ id);
+        System.out.println("ID: " + id);
         try {
             ps = connection.prepareStatement(sql);
             ps.setInt(1, id);
             rs = ps.executeQuery();
             if (rs.next()) {
-                System.out.println("nombre_partida: "+ rs.getString("nombre_partida"));
+                System.out.println("nombre_partida: " + rs.getString("nombre_partida"));
                 resultado.setIdResultado(rs.getInt("id_resultado"));
                 resultado.setNombrePartida(rs.getString("nombre_partida"));
                 resultado.setNombreJugador1(rs.getString("nombre_jugador1"));
                 resultado.setNombreJugador2(rs.getString("nombre_jugador2"));
                 resultado.setGanador(rs.getString("ganador"));
                 resultado.setPunto(rs.getInt("punto"));
-                resultado.setEstado(rs.getString("estado"));     
+                resultado.setEstado(rs.getString("estado"));
             }
         } catch (SQLException e) {
             System.out.println(e.toString());
         }
-        return resultado;}
+        return resultado;
+    }
+
+    @Override
+    public void eliminarResultado(int idResultado) {
+        String sql = "DELETE FROM resultados WHERE id_resultado = ?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, idResultado);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            // Manejo de excepciones
+        }
+    }
 
     @Override
     public void reportarResultado() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
-    
-    
+
 }

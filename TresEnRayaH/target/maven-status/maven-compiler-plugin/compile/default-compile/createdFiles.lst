@@ -4,6 +4,7 @@ pe\edu\upeu\tresenraya\gui\ControllerGame.class
 pe\edu\upeu\tresenraya\gui\Inicio$1.class
 pe\edu\upeu\tresenraya\gui\Inicio.class
 pe\edu\upeu\tresenraya\dao\ResultadoDAO.class
+pe\edu\upeu\tresenraya\gui\Inicio$5.class
 pe\edu\upeu\tresenraya\gui\Inicio$4.class
 pe\edu\upeu\tresenraya\conx\ConnS.class
 pe\edu\upeu\tresenraya\util\UtilsX.class
